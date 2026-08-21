@@ -8,7 +8,10 @@ function Game() {
   if (hasClaimed) {
     return (
       <React.Fragment>
-        <DisplayCard/>
+        <DisplayCard
+          height={300}
+          link="https://www.svgrepo.com/show/530495/link.svg"
+          text="Placeholder Text"/>
         <Link to="/collection">View Collection</Link>
       </React.Fragment>
     );
