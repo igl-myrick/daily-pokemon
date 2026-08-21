@@ -1,11 +1,11 @@
 import React from "react";
 
 function DisplayCard(props) {
-  const { height, width, link, text } = props;
+  const { height, link, text } = props;
 
   return (
     <React.Fragment>
-      <img src={link} height={height} width={width}/>
+      <img src={link} height={height}/>
       <p>{text}</p>
     </React.Fragment>
   );
