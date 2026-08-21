@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import DisplayCard from "./DisplayCard";
 
 function Game() {
   const [hasClaimed, setHasClaimed] = useState(false);
@@ -7,6 +8,7 @@ function Game() {
   if (hasClaimed) {
     return (
       <React.Fragment>
+        <DisplayCard/>
         <Link to="/collection">View Collection</Link>
       </React.Fragment>
     );
