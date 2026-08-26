@@ -4,7 +4,7 @@ import DisplayCard from "./DisplayCard";
 function Collection() {
   return (
     <React.Fragment>
-      <div className="text-center">
+      <div className="text-center mt-4">
         <h4>Your Collection</h4>
         <DisplayCard
           height={100}
