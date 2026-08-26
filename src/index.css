@@ -5,6 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* prevents the scroll bar from changing header container width */
+  overflow: scroll;
+  overflow-x: hidden;
 }
 
 code {
