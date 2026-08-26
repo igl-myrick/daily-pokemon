@@ -9,6 +9,7 @@ function Game() {
     return (
       <React.Fragment>
         <div className="text-center mt-4">
+          <h4>Your Result</h4>
           <DisplayCard
             height={300}
             link="https://www.svgrepo.com/show/530495/link.svg"
