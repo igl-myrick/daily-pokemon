@@ -10,12 +10,14 @@ function App() {
   return (
     <Router>
       <Header/>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="game" element={<Game/>}/>
-        <Route path="collection" element={<Collection/>}/>
-        <Route path="account" element={<Account/>}/>
-      </Routes>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="game" element={<Game/>}/>
+          <Route path="collection" element={<Collection/>}/>
+          <Route path="account" element={<Account/>}/>
+        </Routes>
+      </div>
     </Router>
   );
 }
