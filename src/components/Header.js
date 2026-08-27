@@ -12,7 +12,7 @@ function Header() {
   }
 
   const buttonStyles = {
-    display: "none"
+    all: "unset"
   }
 
   const wrapperStyles = {
@@ -24,30 +24,38 @@ function Header() {
     <React.Fragment>
       <div style={styles}>
         <div className="container">
-          <div className="row">
-            <div className="col-md-3 text-center">
-              <h2>Daily Pokémon</h2>
+          <div className="row align-items-center">
+            <div className="col-md-3">
+              <h2 className="float-end pe-3">Daily Pokémon</h2>
             </div>
             <div className="col-md-3 text-center">
               <div className="row">
-                <div className="col">
+                <div className="col border-start pb-1">
                   <Link to="/">Home</Link>
                 </div>
-                <div className="col">
+                <div className="col border-start">
                   <Link to="game">Game</Link>
                 </div>
-                <div className="col">
+                <div className="col border-start">
                   <Link to="collection">Collection</Link>
                 </div>
               </div>
             </div>
-            <div className="col">
-                <div className="col-md-2 float-end" style={wrapperStyles}>
-                  <button style={buttonStyles} onClick={() => setIsLight(!isLight)} type="button"/>
-                  <img src={isLight ? Sun : Moon} height={32}/>
-                </div>
-                <div className="col float-end">
-                  <Link to="account">Manage account</Link>
+            <div className="col-md-4"/>
+            <div className="col-md-2 d-flex justify-content-around">
+              <div className="col-md-9 float-start">
+                <Link to="account">Manage account</Link>
+              </div>
+              <div className="col-md-3" style={wrapperStyles}>
+                <button
+                  onClick={() => setIsLight(!isLight)}
+                  style={buttonStyles}
+                  type="button">
+                    <img
+                      src={isLight ? Sun : Moon}
+                      height={24}
+                      alt={isLight ? "Theme selector with a sun icon." : "Theme selector with a moon icon."}/>
+                </button>
               </div>
             </div>
           </div>
