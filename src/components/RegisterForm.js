@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 function RegisterForm(props) {
-  const { doCreateUser, toggleRegisterForm } = props;
+  const { toggleRegisterForm } = props;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,7 +11,8 @@ function RegisterForm(props) {
 
   const registerUser = (e) => {
     e.preventDefault();
-    doCreateUser(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(toggleRegisterForm)
       .catch((error) => {
         setError(error);
       });
@@ -39,7 +41,9 @@ function RegisterForm(props) {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}/>
+          <button type="submit">Register</button>
         </form>
+        {currentlyVisibleState}
 
         <button type="button" onClick={toggleRegisterForm}>Back to Accounts</button>
       </div>
