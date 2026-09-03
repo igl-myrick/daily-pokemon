@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import RegisterForm from "./RegisterForm";
 import LoginForm from "./LoginForm";
 import { auth } from "../firebase";
-import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 function AccountControl() {
   const [registerFormVisible, setRegisterFormVisible] = useState(false);
@@ -23,14 +23,6 @@ function AccountControl() {
     }
   }, []);
     
-  const doCreateUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-  }
-
-  const doSignIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  }
-
   const doSignOut = () => {
     return auth.signOut();
   }
@@ -46,9 +38,9 @@ function AccountControl() {
   let currentlyVisibleState = null;
 
   if (registerFormVisible) {
-    currentlyVisibleState = <RegisterForm doCreateUser={doCreateUser} toggleRegisterForm={toggleRegisterForm}/>
+    currentlyVisibleState = <RegisterForm toggleRegisterForm={toggleRegisterForm}/>
   } else if (loginFormVisible) {
-    currentlyVisibleState = <LoginForm doSignIn={doSignIn} toggleLoginForm={toggleLoginForm}/>
+    currentlyVisibleState = <LoginForm toggleLoginForm={toggleLoginForm}/>
   } else if (authUser) {
     currentlyVisibleState =
       <div>
