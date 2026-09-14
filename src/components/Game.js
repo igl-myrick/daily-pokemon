@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
+import pokedex from "../pokedexConfig";
 
 function Game() {
   const [hasClaimed, setHasClaimed] = useState(false);
@@ -13,6 +14,16 @@ function Game() {
     } else {
       return [result, false];
     }
+  }
+
+  const getResult = (id) => {
+    const result = pokedex.getPokemonByName(id);
+    console.log(result);
+  }
+
+  const handleClick = () => {
+    const outcome = determineResult();
+    return getResult(outcome[0]);
   }
   
   if (hasClaimed) {
@@ -33,7 +44,7 @@ function Game() {
       <React.Fragment>
         <div className="text-center mt-4">
           <p>Collect your Pokémon</p>
-          <button type="button" onClick={() => setHasClaimed(true)}>Claim</button>
+          <button type="button" onClick={handleClick}>Claim</button>
         </div>
       </React.Fragment>
     );
