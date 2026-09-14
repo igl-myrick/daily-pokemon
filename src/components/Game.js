@@ -4,6 +4,16 @@ import DisplayCard from "./DisplayCard";
 
 function Game() {
   const [hasClaimed, setHasClaimed] = useState(false);
+
+  const determineResult = () => {
+    const result = Math.floor(Math.random() * 1025) + 1;
+    const shinyResult = Math.floor(Math.random() * 4096);
+    if (shinyResult === 0) {
+      return [result, true];
+    } else {
+      return [result, false];
+    }
+  }
   
   if (hasClaimed) {
     return (
