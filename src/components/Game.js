@@ -17,13 +17,18 @@ function Game() {
   }
 
   const getResult = (id) => {
-    const result = pokedex.getPokemonByName(id);
-    console.log(result);
+    pokedex.getPokemonByName(id)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      });
   }
 
   const handleClick = () => {
     const outcome = determineResult();
-    return getResult(outcome[0]);
+    console.log(getResult(outcome[0]));
   }
   
   if (hasClaimed) {
