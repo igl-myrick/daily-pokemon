@@ -19,12 +19,6 @@ reportWebVitals();
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("%PUBLIC_URL%/sw.js")
-      .then((registration) => {
-        console.log(`SW registered with scope: ${registration.scope}`);
-      })
-      .catch((error) => {
-        console.log(`SW registration failed: ${error}`)
-      });
+    navigator.serviceWorker.register("./sw.js");
   });
 }
