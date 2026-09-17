@@ -16,19 +16,16 @@ function Game() {
     }
   }
 
-  const getResult = (id) => {
-    pokedex.getPokemonByName(id)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        return error;
-      });
+  const getResult = async (id) => {
+    const result = await pokedex.getPokemonByName(id);
+    const pkmn = { name: result.name, sprite: result.sprites.front_default }
+    return pkmn;
   }
 
   const handleClick = () => {
     const outcome = determineResult();
-    console.log(getResult(outcome[0]));
+    const result = getResult(outcome[0]);
+    console.log(result);
   }
   
   if (hasClaimed) {
