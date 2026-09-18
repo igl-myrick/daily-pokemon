@@ -19,10 +19,14 @@ function Game() {
   }
 
   const getResult = async () => {
-    const result = await pokedex.getPokemonByName(determineResult()[0]);
-    const pkmn = { name: result.name, sprite: result.sprites.front_default }
-    setName(pkmn.name);
-    setImg(pkmn.sprite);
+    const result = determineResult();
+    const response = await pokedex.getPokemonByName(result[0]);
+    setName(response.name);
+    if (result[1] === false) {
+      setImg(response.sprites.front_default);
+    } else {
+      setImg(response.sprites.front_shiny);
+    }
     return setHasClaimed(true);
   }
   
