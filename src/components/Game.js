@@ -18,17 +18,11 @@ function Game() {
     }
   }
 
-  const getResult = async (id) => {
-    const result = await pokedex.getPokemonByName(id);
+  const getResult = async () => {
+    const result = await pokedex.getPokemonByName(determineResult()[0]);
     const pkmn = { name: result.name, sprite: result.sprites.front_default }
-    return pkmn;
-  }
-
-  const handleClick = async () => {
-    const outcome = determineResult();
-    const result = await getResult(outcome[0]);
-    setName(result.name);
-    setImg(result.sprite);
+    setName(pkmn.name);
+    setImg(pkmn.sprite);
     return setHasClaimed(true);
   }
   
@@ -50,7 +44,7 @@ function Game() {
       <React.Fragment>
         <div className="text-center mt-4">
           <p>Collect your Pokémon</p>
-          <button type="button" onClick={handleClick}>Claim</button>
+          <button type="button" onClick={getResult}>Claim</button>
         </div>
       </React.Fragment>
     );
