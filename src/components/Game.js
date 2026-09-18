@@ -5,6 +5,8 @@ import pokedex from "../pokedexConfig";
 
 function Game() {
   const [hasClaimed, setHasClaimed] = useState(false);
+  const [name, setName] = useState("");
+  const [img, setImg] = useState("");
 
   const determineResult = () => {
     const result = Math.floor(Math.random() * 1025) + 1;
@@ -22,10 +24,12 @@ function Game() {
     return pkmn;
   }
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const outcome = determineResult();
-    const result = getResult(outcome[0]);
-    console.log(result);
+    const result = await getResult(outcome[0]);
+    setName(result.name);
+    setImg(result.sprite);
+    return setHasClaimed(true);
   }
   
   if (hasClaimed) {
@@ -34,9 +38,9 @@ function Game() {
         <div className="text-center mt-4">
           <h4>Your Result</h4>
           <DisplayCard
-            height={300}
-            link="https://www.svgrepo.com/show/530495/link.svg"
-            text="Placeholder Text"/>
+            height={96}
+            link={img}
+            text={name}/>
           <Link to="/collection">View Collection</Link>
         </div>
       </React.Fragment>
