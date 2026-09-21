@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 function Game() {
   const [hasClaimed, setHasClaimed] = useState(false);
@@ -23,9 +25,11 @@ function Game() {
     const response = await pokedex.getPokemonByName(result[0]);
     setName(response.name);
     if (result[1] === false) {
+      await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_default});
       setImg(response.sprites.front_default);
     } else {
       setImg(response.sprites.front_shiny);
+      await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_shiny});
     }
     return setHasClaimed(true);
   }
