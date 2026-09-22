@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
 import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
 
 function Game() {
   const [hasClaimed, setHasClaimed] = useState(false);
+  const [claimId, setClaimId] = useState(null);
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
+  const [error, setError] = useState(null);
 
   const determineResult = () => {
     const result = Math.floor(Math.random() * 1025) + 1;
@@ -20,16 +22,44 @@ function Game() {
     }
   }
 
+  useEffect(() => {
+    if (hasClaimed) {
+      const unsub = onSnapshot(
+        collection(db, "claims"),
+        (collectionSnapshot) => {
+          const results = [];
+          collectionSnapshot.forEach((doc) => {
+            results.push({
+              name: doc.data().name,
+              img: doc.data().img,
+              id: doc.id
+            });
+          });
+          const userClaim = results.find(results => results.id === claimId);
+          setName(userClaim.name);
+          setImg(userClaim.img);
+        },
+        (error) => {
+          setError(error.message);
+        }
+      );
+
+      return () => unsub();
+    }
+  }, []);
+
   const getResult = async () => {
     const result = determineResult();
     const response = await pokedex.getPokemonByName(result[0]);
-    setName(response.name);
+    // setName(response.name);
     if (result[1] === false) {
-      await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_default});
-      setImg(response.sprites.front_default);
+      const claim = await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_default});
+      setClaimId(claim.id);
+      // setImg(response.sprites.front_default);
     } else {
-      setImg(response.sprites.front_shiny);
-      await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_shiny});
+      const claim = await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_shiny});
+      setClaimId(claim.id);
+      // setImg(response.sprites.front_shiny);
     }
     return setHasClaimed(true);
   }
@@ -47,6 +77,12 @@ function Game() {
         </div>
       </React.Fragment>
     );
+  } else if (error) {
+    return (
+      <React.Fragment>
+        <p>There was an error: {error}</p>
+      </React.Fragment>
+    )
   } else {
     return (
       <React.Fragment>
