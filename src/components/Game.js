@@ -6,11 +6,36 @@ import { db } from "../firebase";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 
 function Game() {
-  const [hasClaimed, setHasClaimed] = useState(false);
   const [claimId, setClaimId] = useState(null);
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (claimId) {
+      const unsub = onSnapshot(
+        collection(db, "claims"),
+        (collectionSnapshot) => {
+          const claims = [];
+          collectionSnapshot.forEach((doc) => {
+            claims.push({
+              name: doc.data().name,
+              img: doc.data().img,
+              id: doc.id
+            });
+          });
+          const userClaim = claims.find(claim => claim.id === claimId);
+          setName(userClaim.name);
+          setImg(userClaim.img);
+        },
+        (error) => {
+          setError(error.message);
+        }
+      );
+
+      return () => unsub();
+    }
+  }, [claimId]);
 
   const determineResult = () => {
     const result = Math.floor(Math.random() * 1025) + 1;
@@ -22,49 +47,19 @@ function Game() {
     }
   }
 
-  useEffect(() => {
-    if (hasClaimed) {
-      const unsub = onSnapshot(
-        collection(db, "claims"),
-        (collectionSnapshot) => {
-          const results = [];
-          collectionSnapshot.forEach((doc) => {
-            results.push({
-              name: doc.data().name,
-              img: doc.data().img,
-              id: doc.id
-            });
-          });
-          const userClaim = results.find(results => results.id === claimId);
-          setName(userClaim.name);
-          setImg(userClaim.img);
-        },
-        (error) => {
-          setError(error.message);
-        }
-      );
-
-      return () => unsub();
-    }
-  }, []);
-
   const getResult = async () => {
     const result = determineResult();
     const response = await pokedex.getPokemonByName(result[0]);
-    // setName(response.name);
     if (result[1] === false) {
       const claim = await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_default});
       setClaimId(claim.id);
-      // setImg(response.sprites.front_default);
     } else {
       const claim = await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_shiny});
       setClaimId(claim.id);
-      // setImg(response.sprites.front_shiny);
     }
-    return setHasClaimed(true);
   }
   
-  if (hasClaimed) {
+  if (claimId) {
     return (
       <React.Fragment>
         <div className="text-center mt-4">
