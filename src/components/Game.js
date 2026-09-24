@@ -26,8 +26,9 @@ function Game() {
           });
           const userClaim = claims.find(claim => claim.id === claimId);
           const response = await pokedex.getPokemonByName(userClaim.pkmnId);
-          const sprite = userClaim[1] ? response.sprites.front_shiny : response.sprites.front_default;
           setName(response.name);
+          console.log(userClaim);
+          const sprite = userClaim.isShiny === true ? response.sprites.front_shiny : response.sprites.
           setImg(sprite);
         },
         (error) => {
