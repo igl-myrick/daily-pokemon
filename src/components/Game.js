@@ -15,18 +15,20 @@ function Game() {
     if (claimId) {
       const unsub = onSnapshot(
         collection(db, "claims"),
-        (collectionSnapshot) => {
+        async (collectionSnapshot) => {
           const claims = [];
           collectionSnapshot.forEach((doc) => {
             claims.push({
-              name: doc.data().name,
-              img: doc.data().img,
+              pkmnId: doc.data().pkmnId,
+              isShiny: doc.data().isShiny,
               id: doc.id
             });
           });
           const userClaim = claims.find(claim => claim.id === claimId);
-          setName(userClaim.name);
-          setImg(userClaim.img);
+          const response = await pokedex.getPokemonByName(userClaim.pkmnId);
+          const sprite = userClaim[1] ? response.sprites.front_shiny : response.sprites.front_default;
+          setName(response.name);
+          setImg(sprite);
         },
         (error) => {
           setError(error.message);
@@ -37,24 +39,14 @@ function Game() {
     }
   }, [claimId]);
 
-  const determineResult = () => {
+  const getResult = async () => {
     const result = Math.floor(Math.random() * 1025) + 1;
     const shinyResult = Math.floor(Math.random() * 4096);
     if (shinyResult === 0) {
-      return [result, true];
-    } else {
-      return [result, false];
-    }
-  }
-
-  const getResult = async () => {
-    const result = determineResult();
-    const response = await pokedex.getPokemonByName(result[0]);
-    if (result[1] === false) {
-      const claim = await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_default});
+      const claim = await addDoc(collection(db, "claims"), { pkmnId: result, isShiny: true });
       setClaimId(claim.id);
     } else {
-      const claim = await addDoc(collection(db, "claims"), { name: response.name, img: response.sprites.front_shiny});
+      const claim = await addDoc(collection(db, "claims"), { pkmnId: result, isShiny: false });
       setClaimId(claim.id);
     }
   }
