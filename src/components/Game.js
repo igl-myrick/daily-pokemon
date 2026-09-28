@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
 import { db } from "../firebase";
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, Timestamp, } from "firebase/firestore";
 
 function Game() {
   const [claimId, setClaimId] = useState(null);
@@ -12,44 +12,37 @@ function Game() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (claimId) {
-      const unsub = onSnapshot(
-        collection(db, "claims"),
-        async (collectionSnapshot) => {
-          const claims = [];
-          collectionSnapshot.forEach((doc) => {
-            claims.push({
-              pkmnId: doc.data().pkmnId,
-              isShiny: doc.data().isShiny,
-              id: doc.id
-            });
-          });
-          const userClaim = claims.find(claim => claim.id === claimId);
-          const response = await pokedex.getPokemonByName(userClaim.pkmnId);
-          setName(response.name);
-          console.log(userClaim);
-          const sprite = userClaim.isShiny === true ? response.sprites.front_shiny : response.sprites.
-          setImg(sprite);
-        },
-        (error) => {
-          setError(error.message);
+    async function unsub() {
+      if (claimId) {
+        const docRef = doc(db, "claims", claimId);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          setName(docSnap.name);
+          setImg(docSnap.img);
+        } else {
+          setError("Claim not found");
         }
-      );
-
-      return () => unsub();
+      }
     }
+    
+    return () => unsub();
   }, [claimId]);
 
   const getResult = async () => {
-    const result = Math.floor(Math.random() * 1025) + 1;
-    const shinyResult = Math.floor(Math.random() * 4096);
-    if (shinyResult === 0) {
-      const claim = await addDoc(collection(db, "claims"), { pkmnId: result, isShiny: true });
-      setClaimId(claim.id);
-    } else {
-      const claim = await addDoc(collection(db, "claims"), { pkmnId: result, isShiny: false });
-      setClaimId(claim.id);
-    }
+    const id = Math.floor(Math.random() * 1025) + 1;
+    const isShiny = Math.floor(Math.random() * 4096) === 0 ? true : false;
+    console.log(isShiny);
+    
+    const result = await pokedex.getPokemonByName(id);
+    console.log(result);
+    return isShiny ? { name: result.name, img: result.sprites.front_shiny } : { name: result.name, img: result.sprites.front_default };
+  }
+
+  const setResult = async () => {
+    const result = getResult();
+    const claim = await addDoc(collection(db, "claims"), { name: result.name, img: result.img, timeClaimed: Timestamp.now() });
+    setClaimId(claim.id);
   }
   
   if (claimId) {
@@ -76,7 +69,7 @@ function Game() {
       <React.Fragment>
         <div className="text-center mt-4">
           <p>Collect your Pokémon</p>
-          <button type="button" onClick={getResult}>Claim</button>
+          <button type="button" onClick={setResult}>Claim</button>
         </div>
       </React.Fragment>
     );
