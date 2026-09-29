@@ -6,6 +6,7 @@ import { db } from "../firebase";
 import { collection, addDoc, getDoc, doc, Timestamp } from "firebase/firestore";
 
 function Game() {
+  const [loading, setLoading] = useState(true);
   const [claimId, setClaimId] = useState(null);
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
@@ -22,6 +23,7 @@ function Game() {
         const data = docSnap.data();
         setName(data.name);
         setImg(data.img);
+        setLoading(false);
       } else {
         setError("Claim not found");
       }
@@ -35,7 +37,6 @@ function Game() {
     const shinyResult = Math.floor(Math.random() * 4096);
     
     const result = await pokedex.getPokemonByName(id);
-    console.log(result);
     const claim = await addDoc(collection(db, "claims"), {
       name: result.name,
       img: shinyResult === 0 ? result.sprites.front_shiny : result.sprites.front_default,
@@ -44,7 +45,22 @@ function Game() {
     setClaimId(claim.id);
   }
   
-  if (claimId) {
+  if (claimId && loading) {
+    return (
+      <React.Fragment>
+        <div className="text-center mt-4 w-25">
+          <h4 className="placeholder-glow">
+            <span className="placeholder col-6"/>
+          </h4>
+          <p className="placeholder-glow">
+            <span className="placeholder col-4"/>
+            <span className="placeholder col-6"/>
+            <span className="placeholder col-8"/>
+          </p>
+        </div>
+      </React.Fragment>
+    )
+  } else if (claimId) {
     return (
       <React.Fragment>
         <div className="text-center mt-4">
