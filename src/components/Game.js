@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
 import { db } from "../firebase";
-import { collection, addDoc, getDoc, doc, Timestamp, } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc, Timestamp } from "firebase/firestore";
 
 function Game() {
   const [claimId, setClaimId] = useState(null);
@@ -12,36 +12,35 @@ function Game() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function unsub() {
-      if (claimId) {
-        const docRef = doc(db, "claims", claimId);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          setName(docSnap.name);
-          setImg(docSnap.img);
-        } else {
-          setError("Claim not found");
-        }
+    if (!claimId) return;
+
+    async function fetchClaim() {
+      const docRef = doc(db, "claims", claimId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setName(data.name);
+        setImg(data.img);
+      } else {
+        setError("Claim not found");
       }
     }
-    
-    return () => unsub();
+
+    fetchClaim();
   }, [claimId]);
 
   const getResult = async () => {
     const id = Math.floor(Math.random() * 1025) + 1;
-    const isShiny = Math.floor(Math.random() * 4096) === 0 ? true : false;
-    console.log(isShiny);
+    const shinyResult = Math.floor(Math.random() * 4096);
     
     const result = await pokedex.getPokemonByName(id);
     console.log(result);
-    return isShiny ? { name: result.name, img: result.sprites.front_shiny } : { name: result.name, img: result.sprites.front_default };
-  }
-
-  const setResult = async () => {
-    const result = getResult();
-    const claim = await addDoc(collection(db, "claims"), { name: result.name, img: result.img, timeClaimed: Timestamp.now() });
+    const claim = await addDoc(collection(db, "claims"), {
+      name: result.name,
+      img: shinyResult === 0 ? result.sprites.front_shiny : result.sprites.front_default,
+      timeClaimed: Timestamp.now()
+    });
     setClaimId(claim.id);
   }
   
@@ -69,7 +68,7 @@ function Game() {
       <React.Fragment>
         <div className="text-center mt-4">
           <p>Collect your Pokémon</p>
-          <button type="button" onClick={setResult}>Claim</button>
+          <button type="button" onClick={getResult}>Claim</button>
         </div>
       </React.Fragment>
     );
