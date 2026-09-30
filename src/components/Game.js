@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { collection, addDoc, getDoc, doc, Timestamp } from "firebase/firestore";
 
 function Game() {
@@ -40,7 +40,8 @@ function Game() {
     const claim = await addDoc(collection(db, "claims"), {
       name: result.name,
       img: shinyResult === 0 ? result.sprites.front_shiny : result.sprites.front_default,
-      timeClaimed: Timestamp.now()
+      timeClaimed: Timestamp.now(),
+      userId: auth.currentUser.uid
     });
     setClaimId(claim.id);
   }
@@ -59,7 +60,7 @@ function Game() {
           </p>
         </div>
       </React.Fragment>
-    )
+    );
   } else if (claimId) {
     return (
       <React.Fragment>
@@ -78,7 +79,7 @@ function Game() {
       <React.Fragment>
         <p>There was an error: {error}</p>
       </React.Fragment>
-    )
+    );
   } else {
     return (
       <React.Fragment>
