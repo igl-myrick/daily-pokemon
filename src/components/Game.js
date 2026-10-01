@@ -4,13 +4,15 @@ import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
 import { auth, db } from "../firebase";
 import { collection, addDoc, getDoc, doc, Timestamp } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 function Game() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [claimId, setClaimId] = useState(null);
   const [name, setName] = useState("");
   const [img, setImg] = useState("");
   const [error, setError] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
 
   useEffect(() => {
     if (!claimId) return;
@@ -32,6 +34,18 @@ function Game() {
     fetchClaim();
   }, [claimId]);
 
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthUser(user);
+      } else {
+        setAuthUser(null);
+      }
+    });
+
+    return () => listen();
+  }, []);
+
   const getResult = async () => {
     const id = Math.floor(Math.random() * 1025) + 1;
     const shinyResult = Math.floor(Math.random() * 4096);
@@ -44,9 +58,18 @@ function Game() {
       userId: auth.currentUser.uid
     });
     setClaimId(claim.id);
+    setLoading(true);
   }
   
-  if (claimId && loading) {
+  if (!authUser) {
+    return (
+      <React.Fragment>
+        <h4>Game</h4>
+        <p>Sign in or register to view the game.</p>
+        <Link to="/account">Manage accounts</Link>
+      </React.Fragment>
+    )
+  } else if (loading) {
     return (
       <React.Fragment>
         <div className="text-center mt-4 w-25">
