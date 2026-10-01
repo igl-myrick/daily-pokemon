@@ -5,6 +5,7 @@ import pokedex from "../pokedexConfig";
 import { auth, db } from "../firebase";
 import { collection, addDoc, getDoc, doc, Timestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { getNextReset } from "./ResetTracker";
 
 function Game() {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ function Game() {
   const [img, setImg] = useState("");
   const [error, setError] = useState(null);
   const [authUser, setAuthUser] = useState(null);
+  const [resetTime, setResetTime] = useState(null);
 
   useEffect(() => {
     if (!claimId) return;
@@ -25,6 +27,7 @@ function Game() {
         const data = docSnap.data();
         setName(data.name);
         setImg(data.img);
+        setResetTime(data.timeOfReset);
         setLoading(false);
       } else {
         setError("Claim not found");
@@ -54,11 +57,22 @@ function Game() {
     const claim = await addDoc(collection(db, "claims"), {
       name: result.name,
       img: shinyResult === 0 ? result.sprites.front_shiny : result.sprites.front_default,
-      timeClaimed: Timestamp.now(),
+      timeOfReset: Timestamp.fromDate(getNextReset()),
       userId: auth.currentUser.uid
     });
     setClaimId(claim.id);
     setLoading(true);
+  }
+
+  const handleReset = () => {
+    if (resetTime > Date.now()) {
+      return;
+    } else {
+      setClaimId(null);
+      setName("");
+      setImg("");
+      setResetTime(null);
+    }
   }
   
   if (!authUser) {
