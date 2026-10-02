@@ -9,6 +9,7 @@ function Collection() {
   const [userClaims, setUserClaims] = useState([]);
   const [authUser, setAuthUser] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!authUser) return;
@@ -28,6 +29,7 @@ function Collection() {
         }));
 
         setUserClaims(claims);
+        setLoading(false);
       } catch (error) {
         setError(error.message);
       }
@@ -48,6 +50,11 @@ function Collection() {
     return () => listen();
   }, []);
 
+  const imgStyle = {
+    height: "96px",
+    width: "96px"
+  }
+
   if (!authUser) {
     return (
       <React.Fragment>
@@ -59,6 +66,36 @@ function Collection() {
     return (
       <React.Fragment>
         <p>There was an error: {error}</p>
+      </React.Fragment>
+    );
+  } else if (loading) {
+    const placeholderCount = 4;
+    const placeholderCard =
+      <div className="col-md-2 mt-4 w-25">
+        <h4 className="placeholder-glow">
+          <span className="placeholder col-6"/>
+        </h4>
+        <p className="placeholder-glow">
+          <span className="placeholder col-8" style={imgStyle}></span><br/>
+          <span className="placeholder col-4"/>
+        </p>
+      </div>;
+
+    const placeholderDiv = [];
+      
+    for (let i = 0; i < placeholderCount; i++) {
+      placeholderDiv.push(React.cloneElement(placeholderCard, {key: i}));
+    }
+
+    return (
+      <React.Fragment>
+        <h4 className="text-center pt-4">Your Collection</h4>
+        <div className="d-flex text-center justify-content-center">
+          <h4 className="placeholder-glow">
+            <span className="placeholder col-8"/>
+          </h4>
+          {placeholderDiv}
+        </div>
       </React.Fragment>
     );
   } else if (userClaims.length > 0) {
