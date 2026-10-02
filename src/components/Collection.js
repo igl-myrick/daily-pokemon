@@ -8,29 +8,33 @@ import { onAuthStateChanged } from "firebase/auth";
 function Collection() {
   const [userClaims, setUserClaims] = useState([]);
   const [authUser, setAuthUser] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!authUser) return;
 
     async function getUserCollection() {
-      const q = query(
-        collection(db, "claims"), where("userId", "==", auth.currentUser.uid)
-      );
+      try {
+        const q = query(
+          collection(db, "claims"),
+          where("userId", "==", authUser.uid)
+        );
 
-      const snap = await getDocs(q);
-      const claims = [];
-      snap.forEach((doc) => {
-        claims.push({
+        const snap = await getDocs(q);
+        const claims = snap.docs.map((doc) => ({
+          id: doc.id,
           name: doc.data().name,
           img: doc.data().img
-        });
-      });
+        }));
 
-      setUserClaims(claims);
+        setUserClaims(claims);
+      } catch (error) {
+        setError(error.message);
+      }
     }
 
-    return () => getUserCollection();
-  }, []);
+    getUserCollection();
+  }, [authUser]);
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
@@ -51,21 +55,27 @@ function Collection() {
         <p>Please <Link to="/account">sign in or register</Link> to view your collection.</p>
       </React.Fragment>
     );
-  } else if (userClaims.length > 0) {
-    const output = userClaims.map((claim) => {
-      <div className="col-md-1">
-        <DisplayCard
-          height={96}
-          text={claim.name}
-          link={claim.img}/>
-      </div>
-    });
-
+  } else if (error) {
     return (
       <React.Fragment>
-        <h4>Your Collection</h4>
-        <div className="row">
-          {output}
+        <p>There was an error: {error}</p>
+      </React.Fragment>
+    );
+  } else if (userClaims.length > 0) {
+    return (
+      <React.Fragment>
+        <div className="container text-center pt-4">
+          <h4>Your Collection</h4>
+          <div className="row">
+            {userClaims.map((claim) => (
+              <div className="col-md-1" key={claim.id}>
+                <DisplayCard
+                  height={96}
+                  text={claim.name}
+                  link={claim.img}/>
+              </div>
+            ))} 
+          </div>
         </div>
       </React.Fragment>
     );
