@@ -43,17 +43,21 @@ function AccountControl() {
     currentlyVisibleState = <LoginForm toggleLoginForm={toggleLoginForm}/>
   } else if (authUser) {
     currentlyVisibleState =
-      <div>
+      <div className="text-center pt-4">
         <h4>Manage Your Account</h4>
         <p>Welcome back, {authUser.email}</p>
-        <button type="button" onClick={doSignOut}>Log Out</button>
+        <button type="button" className="btn btn-outline-secondary" onClick={doSignOut}>Log Out</button>
       </div>
   } else {
     currentlyVisibleState =
-      <div>
+      <div className="text-center pt-4">
         <h4>Manage Your Account</h4>
-        <button type="button" onClick={toggleLoginForm}>Login</button>
-        <button type="button" onClick={toggleRegisterForm}>Register</button>
+        <div className="pt-4">
+          <button className="btn btn-primary" type="button" onClick={toggleLoginForm}>Login</button>
+        </div>
+        <div className="pt-4">
+          <button className="btn btn-primary" type="button" onClick={toggleRegisterForm}>Register</button>
+        </div>
       </div>
   }
 
