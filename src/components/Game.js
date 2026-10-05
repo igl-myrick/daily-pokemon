@@ -130,8 +130,9 @@ function Game() {
     return (
       <React.Fragment>
         <div className="text-center mt-4">
+          <h4>Game</h4>
           <p>Collect your Pokémon</p>
-          <button type="button" onClick={getResult}>Claim</button>
+          <button type="button" className="btn btn-primary" onClick={getResult}>Claim</button>
         </div>
       </React.Fragment>
     );
