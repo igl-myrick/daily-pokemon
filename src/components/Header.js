@@ -21,7 +21,7 @@ function Header() {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-3">
-              <h2 className="float-end pe-3">Daily Pokémon</h2>
+              <h2 className="text-center">Daily Pokémon</h2>
             </div>
             <div className="col-md-3 text-center">
               <div className="row">
