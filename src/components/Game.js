@@ -74,27 +74,36 @@ function Game() {
       setResetTime(null);
     }
   }
+
+  const imgStyle = {
+    height: "96px",
+    width: "96px"
+  }
   
   if (!authUser) {
     return (
       <React.Fragment>
-        <h4>Game</h4>
-        <p>Sign in or register to view the game.</p>
-        <Link to="/account">Manage accounts</Link>
+        <div className="text-center pt-4">
+          <h4>Game</h4>
+          <p><Link to="/account">Sign in or register</Link> to start claiming.</p>
+        </div>
       </React.Fragment>
-    )
+    );
   } else if (loading) {
     return (
       <React.Fragment>
-        <div className="text-center mt-4 w-25">
-          <h4 className="placeholder-glow">
-            <span className="placeholder col-6"/>
-          </h4>
-          <p className="placeholder-glow">
-            <span className="placeholder col-4"/>
-            <span className="placeholder col-6"/>
-            <span className="placeholder col-8"/>
-          </p>
+        <div className="d-flex justify-content-center">
+          <div className="text-center mt-4 w-25">
+            <h4 className="placeholder-glow">
+              <span className="placeholder col-6"/>
+            </h4>
+            <p className="placeholder-glow">
+              <span className="placeholder col-8" style={imgStyle}></span><br/>
+              <span className="placeholder col-4"/>
+              <span className="placeholder col-6"/>
+              <span className="placeholder col-8"/>
+            </p>
+          </div>
         </div>
       </React.Fragment>
     );
