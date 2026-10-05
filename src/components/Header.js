@@ -6,11 +6,6 @@ import Moon from "./../img/moon.svg"
 function Header() {
   const [isLight, setIsLight] = useState(true);
 
-  const styles = {
-    backgroundColor: "#c60019",
-    color: "white"
-  }
-
   const buttonStyles = {
     all: "unset"
   }
@@ -22,7 +17,7 @@ function Header() {
   
   return (
     <React.Fragment>
-      <div style={styles}>
+      <div>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-3">
@@ -30,13 +25,13 @@ function Header() {
             </div>
             <div className="col-md-3 text-center">
               <div className="row">
-                <div className="col border-start pb-1">
+                <div className="col pb-1">
                   <Link to="/">Home</Link>
                 </div>
-                <div className="col border-start">
+                <div className="col">
                   <Link to="game">Game</Link>
                 </div>
-                <div className="col border-start">
+                <div className="col">
                   <Link to="collection">Collection</Link>
                 </div>
               </div>
@@ -58,6 +53,7 @@ function Header() {
                 </button>
               </div>
             </div>
+          <hr/>
           </div>
         </div>
       </div>
