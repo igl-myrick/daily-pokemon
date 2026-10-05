@@ -58,8 +58,10 @@ function Collection() {
   if (!authUser) {
     return (
       <React.Fragment>
-        <h4>Your Collection</h4>
-        <p>Please <Link to="/account">sign in or register</Link> to view your collection.</p>
+        <div className="text-center pt-4">
+          <h4>Your Collection</h4>
+          <p>Please <Link to="/account">sign in or register</Link> to view your collection.</p>
+        </div>
       </React.Fragment>
     );
   } else if (error) {
@@ -119,8 +121,10 @@ function Collection() {
   } else {
     return (
       <React.Fragment>
-        <h4>Your Collection</h4>
-        <p>Nothing yet!</p>
+        <div className="text-center pt-4">
+          <h4>Your Collection</h4>
+          <p>Nothing yet!</p>
+        </div>
       </React.Fragment>
     );
   }
