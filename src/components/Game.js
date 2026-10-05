@@ -51,12 +51,18 @@ function Game() {
 
   const getResult = async () => {
     const id = Math.floor(Math.random() * 1025) + 1;
-    const shinyResult = Math.floor(Math.random() * 4096);
+    const isShiny = Math.floor(Math.random() * 4096);
     
-    const result = await pokedex.getPokemonByName(id);
+    const pkmnResult = await pokedex.getPokemonByName(id);
+    const speciesResult = await pokedex.getPokemonSpeciesByName(id);
+
+    const name = speciesResult.names.find(n => n.language.name === "en").name;
+    const img = isShiny ? pkmnResult.sprites.front_default : pkmnResult.sprites.front_shiny;
+
     const claim = await addDoc(collection(db, "claims"), {
-      name: result.name,
-      img: shinyResult === 0 ? result.sprites.front_shiny : result.sprites.front_default,
+      name: name,
+      img: img,
+      timeClaimed: Timestamp.now(),
       timeOfReset: Timestamp.fromDate(getNextReset()),
       userId: auth.currentUser.uid
     });
