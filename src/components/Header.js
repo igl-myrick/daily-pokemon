@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import Sun from "./../img/sun.svg";
 import Moon from "./../img/moon.svg"
+import { themes } from "../context/theme-context";
 
-function Header() {
-  const [isLight, setIsLight] = useState(true);
-
+function Header(props) {
   const buttonStyles = {
     all: "unset"
   }
@@ -43,13 +42,13 @@ function Header() {
               </div>
               <div className="col-md-3" style={wrapperStyles}>
                 <button
-                  onClick={() => setIsLight(!isLight)}
+                  onClick={() => props.toggleTheme()}
                   style={buttonStyles}
                   type="button">
                     <img
-                      src={isLight ? Sun : Moon}
+                      src={props.theme === themes.light ? Sun : Moon}
                       height={24}
-                      alt={isLight ? "Theme selector with a sun icon." : "Theme selector with a moon icon."}/>
+                      alt={props.theme === themes.light ? "Theme selector with a sun icon." : "Theme selector with a moon icon."}/>
                 </button>
               </div>
             </div>
