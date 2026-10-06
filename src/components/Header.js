@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Sun from "./../img/sun.svg";
 import Moon from "./../img/moon.svg"
 
@@ -26,20 +26,20 @@ function Header() {
             <div className="col-md-3 text-center">
               <div className="row">
                 <div className="col pb-1">
-                  <Link to="/">Home</Link>
+                  <NavLink className="nav-link" to="/">Home</NavLink>
                 </div>
                 <div className="col">
-                  <Link to="game">Game</Link>
+                  <NavLink className="nav-link" to="game">Game</NavLink>
                 </div>
                 <div className="col">
-                  <Link to="collection">Collection</Link>
+                  <NavLink className="nav-link" to="collection">Collection</NavLink>
                 </div>
               </div>
             </div>
             <div className="col-md-4"/>
             <div className="col-md-2 d-flex justify-content-around">
               <div className="col-md-9 float-start">
-                <Link to="account">Manage account</Link>
+                <NavLink className="nav-link" to="account">Manage account</NavLink>
               </div>
               <div className="col-md-3" style={wrapperStyles}>
                 <button
