@@ -25,10 +25,11 @@ function Collection() {
         const claims = snap.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name,
-          img: doc.data().img
+          img: doc.data().img,
+          timeClaimed: doc.data().timeClaimed.toDate()
         }));
 
-        setUserClaims(claims);
+        setUserClaims(claims.sort((a,b) => a.timeClaimed - b.timeClaimed));
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -106,6 +107,7 @@ function Collection() {
                   height={96}
                   text={claim.name}
                   link={claim.img}/>
+                <p>Claimed on {claim.timeClaimed.toLocaleDateString()}</p>
               </div>
             ))} 
           </div>
