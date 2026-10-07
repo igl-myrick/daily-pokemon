@@ -73,13 +73,10 @@ function Collection() {
   } else if (loading) {
     const placeholderCount = 4;
     const placeholderCard =
-      <div className="col-md-2 mt-4 w-25">
-        <h4 className="placeholder-glow">
-          <span className="placeholder col-6"/>
-        </h4>
+      <div className="col-md-1 mt-4">
         <p className="placeholder-glow">
-          <span className="placeholder col-8" style={imgStyle}></span><br/>
-          <span className="placeholder col-4"/>
+          <span className="placeholder" style={imgStyle}></span><br/>
+          <span className="placeholder col-8"/>
         </p>
       </div>;
 
@@ -91,11 +88,8 @@ function Collection() {
 
     return (
       <React.Fragment>
-        <h4 className="text-center pt-4">Your Collection</h4>
-        <div className="d-flex text-center justify-content-center">
-          <h4 className="placeholder-glow">
-            <span className="placeholder col-8"/>
-          </h4>
+        <h4 className="container text-center pt-4">Your Collection</h4>
+        <div className="text-center row">
           {placeholderDiv}
         </div>
       </React.Fragment>
