@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeContext, themes } from "../context/theme-context";
 
 function App() {
-  const [theme, setTheme] = useState(themes.light);
+  const [theme, setTheme] = useState(themes.dark);
 
   document.body.style.backgroundColor = theme.backgroundColor;
   document.body.style.color = theme.textColor;
