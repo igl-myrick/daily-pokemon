@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { ThemeContext } from "../context/theme-context";
 
 function LoginForm(props) {
   const { toggleLoginForm } = props;
@@ -8,6 +9,15 @@ function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const theme = useContext(ThemeContext);
+
+  const inputStyles = {
+    "--input-background": theme.inputBackground,
+    "--input-color": theme.inputColor,
+    "--input-border": theme.borderColor,
+    "--input-placeholder": theme.placeholderColor
+  };
 
   const logUserIn = (e) => {
     e.preventDefault();
@@ -21,7 +31,7 @@ function LoginForm(props) {
   let currentlyVisibleState = null;
 
   if (error) {
-    currentlyVisibleState = <p>There was an error: {error}</p>
+    currentlyVisibleState = <p>There was an error: {error.message}</p>
   }
 
   return (
@@ -29,30 +39,35 @@ function LoginForm(props) {
       <div className="row d-flex justify-content-center">
         <div className="text-center mt-4 col-md-4">
           <h4>Log In</h4>
-          <form onSubmit={logUserIn}>
+          <form onSubmit={logUserIn} className="mb-4">
             <div className="input-group mb-2">
               <input
-                className="form-control"
+                style={inputStyles}
+                className="form-control themed-input"
                 type="email"
                 name="email"
                 placeholder="Email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}/>
             </div>
             <div className="input-group mb-2">
               <input
-                className="form-control"
+                style={inputStyles}
+                className="form-control themed-input"
                 type="password"
                 name="password"
                 placeholder="Password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}/>
             </div>
-            <button type="submit" className="btn btn-primary">Log in</button>
+            {currentlyVisibleState}
+            <button type="submit" className={theme.inputBackground === "white" ? "btn btn-primary" : "btn btn-light"}>Log in</button>
           </form>
-          {currentlyVisibleState}
+          <p>or</p>
 
-          <button type="button" className="btn btn-outline-secondary mt-4" onClick={toggleLoginForm}>Back to Accounts</button>
+          <button type="button" className={theme.inputBackground === "white" ? "btn btn-primary mt-2" : "btn btn-light mt-2"} onClick={toggleLoginForm}>Back to Accounts</button>
         </div>
       </div>
     </React.Fragment>
