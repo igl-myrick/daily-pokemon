@@ -40,3 +40,9 @@ code {
   color: var(--input-color);
   border-color: var(--input-border);
 }
+
+.btn-gradient {
+  --bs-btn-border-color: none;
+  --bs-btn-color: white;
+  background: linear-gradient(0.25turn, #d93838, #6ed938);
+}
