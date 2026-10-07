@@ -19,3 +19,24 @@ code {
 .nav-link.active {
   font-style: italic;
 }
+
+.themed-input {
+  background-color: var(--input-background);
+  color: var(--input-color);
+  border-color: var(--input-border);
+}
+
+.themed-input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--input-background) inset !important;
+  -webkit-text-fill-color: var(--input-color) !important;
+}
+
+.themed-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.themed-input:focus {
+  background-color: var(--input-background);
+  color: var(--input-color);
+  border-color: var(--input-border);
+}
