@@ -44,5 +44,9 @@ code {
 .btn-gradient {
   --bs-btn-border-color: none;
   --bs-btn-color: white;
-  background: linear-gradient(0.25turn, #d93838, #6ed938);
+  --bs-btn-hover-color: white;
+  --bs-btn-hover-bg: #d9d9d9;
+
+  background-image: linear-gradient(0.25turn, #d93838, #6ed938);
+  background-blend-mode: multiply;
 }
