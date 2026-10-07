@@ -63,11 +63,19 @@ function LoginForm(props) {
                 onChange={(e) => setPassword(e.target.value)}/>
             </div>
             {currentlyVisibleState}
-            <button type="submit" className={theme.inputBackground === "white" ? "btn btn-primary" : "btn btn-light"}>Log in</button>
+            <button
+              type="submit"
+              className={theme.backgroundColor === "white" ? "btn btn-primary" : "btn btn-light"}>
+                Log in
+            </button>
           </form>
           <p>or</p>
-
-          <button type="button" className={theme.inputBackground === "white" ? "btn btn-primary mt-2" : "btn btn-light mt-2"} onClick={toggleLoginForm}>Back to Accounts</button>
+          <button
+            type="button"
+            className={theme.backgroundColor === "white" ? "btn btn-primary mt-2" : "btn btn-light mt-2"}
+            onClick={toggleLoginForm}>
+              Back to Accounts
+          </button>
         </div>
       </div>
     </React.Fragment>
