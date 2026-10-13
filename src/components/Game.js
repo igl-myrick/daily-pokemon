@@ -5,7 +5,6 @@ import pokedex from "../pokedexConfig";
 import { auth, db } from "../firebase";
 import { collection, addDoc, getDocs, query, where, limit, Timestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { getNextReset, getHoursRemaining } from "./ResetTracker";
 
 function Game() {
   const [loading, setLoading] = useState(true);
@@ -62,6 +61,24 @@ function Game() {
     await addDoc(collection(db, "claims"), result);
     setClaim(result);
     setLoading(false);
+  }
+
+  const getNextReset = (now = new Date()) => {
+    const nextDay = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      19 // 7pm UTC
+    ));
+    if (nextDay <= now) {
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+    }
+    return nextDay;
+  }
+
+  const getHoursRemaining = (target) => {
+    const hoursInMs = Math.ceil((target - Date.now()) / 3600000);
+    return hoursInMs <= 1 ? "less than 1 hour" : `${hoursInMs} hours`;
   }
 
   const imgStyle = {
