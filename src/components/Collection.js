@@ -51,11 +51,6 @@ function Collection() {
     return () => listen();
   }, []);
 
-  const imgStyle = {
-    height: "96px",
-    width: "96px"
-  }
-
   if (!authUser) {
     return (
       <React.Fragment>
@@ -72,27 +67,10 @@ function Collection() {
       </React.Fragment>
     );
   } else if (loading) {
-    const placeholderCount = 4;
-    const placeholderCard =
-      <div className="col-md-1 mt-4">
-        <p className="placeholder-glow">
-          <span className="placeholder" style={imgStyle}></span><br/>
-          <span className="placeholder col-8"/>
-        </p>
-      </div>;
-
-    const placeholderDiv = [];
-      
-    for (let i = 0; i < placeholderCount; i++) {
-      placeholderDiv.push(React.cloneElement(placeholderCard, {key: i}));
-    }
-
     return (
       <React.Fragment>
         <h4 className="container text-center pt-4">Your Collection</h4>
-        <div className="text-center row">
-          {placeholderDiv}
-        </div>
+        <p className="text-center pt-4">Loading...</p>
       </React.Fragment>
     );
   } else if (userClaims.length > 0) {
