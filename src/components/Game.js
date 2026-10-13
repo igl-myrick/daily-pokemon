@@ -3,39 +3,31 @@ import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
 import pokedex from "../pokedexConfig";
 import { auth, db } from "../firebase";
-import { collection, addDoc, getDoc, doc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, limit, Timestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { getNextReset } from "./ResetTracker";
+import { getNextReset, getHoursRemaining } from "./ResetTracker";
 
 function Game() {
-  const [loading, setLoading] = useState(false);
-  const [claimId, setClaimId] = useState(null);
-  const [name, setName] = useState("");
-  const [img, setImg] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [claim, setClaim] = useState(null);
   const [error, setError] = useState(null);
   const [authUser, setAuthUser] = useState(null);
-  const [resetTime, setResetTime] = useState(null);
 
   useEffect(() => {
-    if (!claimId) return;
+    if (!authUser) return;
 
-    async function fetchClaim() {
-      const docRef = doc(db, "claims", claimId);
-      const docSnap = await getDoc(docRef);
+    const claim = query(
+      collection(db, "claims"),
+      where("userId", "==", authUser.uid),
+      where("timeOfReset", ">", Timestamp.now()),
+      limit(1)
+    );
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setName(data.name);
-        setImg(data.img);
-        setResetTime(data.timeOfReset);
-        setLoading(false);
-      } else {
-        setError("Claim not found");
-      }
-    }
-
-    fetchClaim();
-  }, [claimId]);
+    getDocs(claim)
+      .then((snap) => !snap.empty && setClaim(snap.docs[0].data()))
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
+  }, [authUser]);
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
@@ -50,35 +42,26 @@ function Game() {
   }, []);
 
   const getResult = async () => {
+    setLoading(true);
     const id = Math.floor(Math.random() * 1025) + 1;
     const isShiny = Math.floor(Math.random() * 4096);
-    
+
     const pkmnResult = await pokedex.getPokemonByName(id);
     const speciesResult = await pokedex.getPokemonSpeciesByName(id);
 
     const name = speciesResult.names.find(n => n.language.name === "en").name;
     const img = isShiny ? pkmnResult.sprites.front_default : pkmnResult.sprites.front_shiny;
 
-    const claim = await addDoc(collection(db, "claims"), {
+    const result = {
       name: name,
       img: img,
       timeClaimed: Timestamp.now(),
       timeOfReset: Timestamp.fromDate(getNextReset()),
       userId: auth.currentUser.uid
-    });
-    setClaimId(claim.id);
-    setLoading(true);
-  }
-
-  const handleReset = () => {
-    if (resetTime > Date.now()) {
-      return;
-    } else {
-      setClaimId(null);
-      setName("");
-      setImg("");
-      setResetTime(null);
-    }
+    };
+    await addDoc(collection(db, "claims"), result);
+    setClaim(result);
+    setLoading(false);
   }
 
   const imgStyle = {
@@ -105,24 +88,9 @@ function Game() {
             </h4>
             <p className="placeholder-glow">
               <span className="placeholder col-8" style={imgStyle}></span><br/>
-              <span className="placeholder col-4"/>
-              <span className="placeholder col-6"/>
               <span className="placeholder col-8"/>
             </p>
           </div>
-        </div>
-      </React.Fragment>
-    );
-  } else if (claimId) {
-    return (
-      <React.Fragment>
-        <div className="text-center mt-4">
-          <h4>Your Result</h4>
-          <DisplayCard
-            height={96}
-            link={img}
-            text={name}/>
-          <Link to="/collection">View Collection</Link>
         </div>
       </React.Fragment>
     );
@@ -130,6 +98,19 @@ function Game() {
     return (
       <React.Fragment>
         <p>There was an error: {error}</p>
+      </React.Fragment>
+    );
+  } else if (claim) {
+    return (
+      <React.Fragment>
+        <div className="text-center mt-4">
+          <h4>Your Result</h4>
+          <DisplayCard
+            height={96}
+            link={claim.img}
+            text={claim.name}/>
+          <p className="mt-4">Next claim available in {getHoursRemaining(claim.timeOfReset.toDate())} | <Link to="/collection">View Collection</Link></p>
+        </div>
       </React.Fragment>
     );
   } else {
