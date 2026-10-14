@@ -51,12 +51,12 @@ function Collection() {
     return () => listen();
   }, []);
 
-  if (!authUser) {
+  if (!authUser || !auth.currentUser.emailVerified) {
     return (
       <React.Fragment>
         <div className="text-center pt-4">
           <h4>Your Collection</h4>
-          <p>Please <Link to="/account">sign in or register</Link> to view your collection.</p>
+          <p>{!authUser ? <Link to="/account">Sign in or register</Link> : "Please verify your email"} to view your collection.</p>
         </div>
       </React.Fragment>
     );

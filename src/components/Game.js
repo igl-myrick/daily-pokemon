@@ -86,12 +86,12 @@ function Game() {
     width: "96px"
   }
   
-  if (!authUser) {
+  if (!authUser || !auth.currentUser.emailVerified) {
     return (
       <React.Fragment>
         <div className="text-center pt-4">
           <h4>Game</h4>
-          <p><Link to="/account">Sign in or register</Link> to start claiming.</p>
+          <p>{!authUser ? <Link to="/account">Sign in or register</Link> : "Please verify your email"} to start claiming.</p>
         </div>
       </React.Fragment>
     );
