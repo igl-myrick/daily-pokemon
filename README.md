@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# Daily Pokémon
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### _Pokémon-based browser minigame._
 
-## Available Scripts
+#### By _**India Lyon-Myrick**_
 
-In the project directory, you can run:
+## Technologies Used
 
-### `npm start`
+* _Javascript_
+* _React_
+* _HTML_
+* _CSS_
+* _Webpack_
+* _Node.js_
+* _Git_
+* _Firebase/Firestore_
+* _React Router_
+* _PokeAPI / PokeAPI JS Wrapper_
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Description
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+_A web-based minigame based on [PokeAPI](https://pokeapi.co/). Once registered, users can claim one randomly generated Pokémon per day. The app uses Firestore to keep track of users' claims, and users can view their collection at any time from the Collection page. Additionally, the site includes dark and light themes._
 
-### `npm test`
+_Component diagram:_
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![](./src/img/diagram.png)
 
-### `npm run build`
+#### Future Goals
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* _Add authentication using a Google Account_
+* _Authentication refactor using React Context_
+* _Add logic to allow users to collect alternate Pokémon forms_
+* _Add mobile-specific styling (refactor header and add w-50 to DisplayCards)_
+* _Allow users to select their preferred theme_
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Setup/Installation Requirements
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* _You will need Node.js (`https://nodejs.org/en/download/current`) to run the program._
 
-### `npm run eject`
+_1: Clone the repository to a folder of choice on your machine (by either using the "Code" button on the GitHub page, or in a terminal application using `git clone https://github.com/igl-myrick/daily-pokemon`)._
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+_2: Using a terminal application such as Git Bash or Windows Command Prompt, navigate to the top level of the program folder and run `npm install`. This may take some time._
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+_3: Next, run `npm run build` to build the program._
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+_4: Once the program is built, run `npm run start` to open and use the program._
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Known Bugs
 
-## Learn More
+* _None at the moment._
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+_[MIT](/LICENSE.md)_
