@@ -1,6 +1,6 @@
 # Daily Pokémon
 
-#### _Pokémon-based browser minigame._
+#### _Pokémon-based browser minigame | Hosted at https://daily-pkmn.web.app/_
 
 #### By _**India Lyon-Myrick**_
 
@@ -36,6 +36,8 @@ _Component diagram:_
 ## Setup/Installation Requirements
 
 * _You will need Node.js (`https://nodejs.org/en/download/current`) to run the program._
+* _Additionally, to run the program from source, you will need your own Firebase project. Google provides some instructions [here](https://firebase.google.com/docs/web/setup)._
+* _Once you have a Firebase project, create a `.env` file in the root directory, and add your Firebase config object as environment variables prefixed with `REACT_APP_`, e.g. `REACT_APP_FIREBASE_API_KEY="1234567890"`._
 
 _1: Clone the repository to a folder of choice on your machine (by either using the "Code" button on the GitHub page, or in a terminal application using `git clone https://github.com/igl-myrick/daily-pokemon`)._
 
